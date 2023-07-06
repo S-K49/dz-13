@@ -15,7 +15,7 @@ public class DBReader {
     private final static String GETSTUDENTS = "select * from students";
     private final static String SELECT = "select * from students where id=?";
     private final static String INSERT = "insert into students values(?,?,?)";
-    private final static String UPDATE = "update students set firstname=? where id=?";
+    private final static String UPDATE = "update students set id=? where firstname=?";
 
     private final static String DELETE = "delete from students where id=?";
 
@@ -24,14 +24,14 @@ public class DBReader {
         List<String> students = new ArrayList<>();
 
 
-        try(Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
             /*Statement sqlStetement = connection.createStatement();
-            ResultSet resultSet = sqlStetement.executeQuery(QUERY);*/
+            ResultSet resultSet = sqlStetement.executeQuery(GETSTUDENTS);*/
 
             PreparedStatement preparedStatement = connection.prepareStatement(GETSTUDENTS);
-            ResultSet resultSet = preparedStatement.executeQuery(GETSTUDENTS);
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 String userName = new String(resultSet.getString("firstname"));
                 String userSurname = new String(resultSet.getString("lastname"));
 
@@ -39,7 +39,7 @@ public class DBReader {
                 students.add(userSurname);
             }
 
-        }catch(SQLException exception){
+        } catch (SQLException exception) {
             throw new RuntimeException(String.format("Please check connection" + ". URL[%s], name[%s], password[%s]", URL, USER_NAME, USER_PASSWORD));
         }
         return students;
@@ -50,13 +50,13 @@ public class DBReader {
         List<String> students = new ArrayList<>();
 
 
-        try(Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT);
             preparedStatement.setInt(1, 2);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 String userName = new String(resultSet.getString("firstname"));
                 String userSurname = new String(resultSet.getString("lastname"));
 
@@ -64,7 +64,7 @@ public class DBReader {
                 students.add(userSurname);
             }
 
-        }catch(SQLException exception){
+        } catch (SQLException exception) {
             throw new RuntimeException(String.format("Please check connection" + ". URL[%s], name[%s], password[%s]", URL, USER_NAME, USER_PASSWORD));
         }
         return students;
@@ -74,15 +74,15 @@ public class DBReader {
         List<String> students = new ArrayList<>();
 
 
-        try(Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
-            preparedStatement.setInt(1,4);
-            preparedStatement.setString(2,"Jack");
-            preparedStatement.setString(3,"Black");
+            preparedStatement.setInt(1, 4);
+            preparedStatement.setString(2, "Jack");
+            preparedStatement.setString(3, "Black");
             preparedStatement.executeUpdate();
 
-        }catch(SQLException exception){
+        } catch (SQLException exception) {
             throw new RuntimeException(String.format("Please check connection" + ". URL[%s], name[%s], password[%s]", URL, USER_NAME, USER_PASSWORD));
         }
         return students;
@@ -92,14 +92,14 @@ public class DBReader {
         List<String> students = new ArrayList<>();
 
 
-        try(Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-            preparedStatement.setString(1,"New name");
-            preparedStatement.setInt(2,1);
+            preparedStatement.setInt(1, 2);
+            preparedStatement.setString(2, "New name");
             preparedStatement.executeUpdate();
 
-        }catch(SQLException exception){
+        } catch (SQLException exception) {
             throw new RuntimeException(String.format("Please check connection" + ". URL[%s], name[%s], password[%s]", URL, USER_NAME, USER_PASSWORD));
         }
         return students;
@@ -108,13 +108,13 @@ public class DBReader {
     public static List<String> deleteStudents() {
         List<String> students = new ArrayList<>();
 
-        try(Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
+        try (Connection connection = DriverManager.getConnection(URL, USER_NAME, USER_PASSWORD)) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
-            preparedStatement.setInt(1,4);
+            preparedStatement.setInt(1, 4);
             preparedStatement.executeUpdate();
 
-        }catch(SQLException exception){
+        } catch (SQLException exception) {
             throw new RuntimeException(String.format("Please check connection" + ". URL[%s], name[%s], password[%s]", URL, USER_NAME, USER_PASSWORD));
         }
         return students;
